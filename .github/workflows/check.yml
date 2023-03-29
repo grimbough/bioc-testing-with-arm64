@@ -1,0 +1,28 @@
+---
+name: Implementation tests
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+
+jobs:
+  r-cmd-arm64:
+    name: R CMD check on ARM64
+    runs-on: ubuntu-22.04
+    container: arm64v8/r-base:latest
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{inputs.repository}}
+          fetch-depth: 0
+          
+      - name: Arch check
+        run: uname -m 
+        
+      - name: R CMD build
+        run: R CMD build Rhdf5lib

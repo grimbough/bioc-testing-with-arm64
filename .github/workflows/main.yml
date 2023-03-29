@@ -1,0 +1,27 @@
+name: test build deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow-dispatch:
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+
+    steps:
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64v8
+
+      - name: Test package
+        uses: ./.github/workflows/check.yml
+        with:
+          repository: grimbough/Rhdf5lib
