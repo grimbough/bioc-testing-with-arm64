@@ -28,8 +28,10 @@ jobs:
           
           install: |
             apt-get update -q -y
-            apt-get install -q -y git
-            Rscript -e "install.packages(c('BiocManager', 'devtools'))"
+            apt-get install -q -y git libxml2-dev libcurl4-openssl-dev
+            echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
+            Rscript -e "options()"
+            Rscript -e "install.packages(c('BiocManager', 'remotes'))"
           
           run: |
             uname -m
