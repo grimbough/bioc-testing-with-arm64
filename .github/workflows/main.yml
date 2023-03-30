@@ -23,7 +23,8 @@ jobs:
         with:
           arch: none
           distro: none
-          base_image: arm64v8/r-base
+          #base_image: arm64v8/r-base
+          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
           githubToken: ${{ github.token }}
           
           install: |
