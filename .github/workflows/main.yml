@@ -23,7 +23,7 @@ jobs:
         with:
           arch: none
           distro: none
-          base_image: bioconductor/bioconductor:RELEASE_3_16@b1567beb88ec8efc0e489abf553b0238ccdf7503c2a815a9bff183dc6be7138b
+          base_image: bioconductor/bioconductor:RELEASE_3_16
           githubToken: ${{ github.token }}
           run: |
             uname -m
