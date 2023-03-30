@@ -33,7 +33,13 @@ jobs:
           
           run: |
             uname -m
+            export R_LIBS_USER=/tmp/R-lib
+            mkdir -p ${R_LIBS_USER}
             env
             git clone https://github.com/grimbough/Rhdf5lib.git
             Rscript -e "library(remotes)" -e "dev_package_deps('Rhdf5lib', dependencies = TRUE) |> update(upgrade = 'always')"
-            R CMD build Rhdf5lib
+            PKG=Rhdf5lib
+            R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
+            cat ${PKG}.install-out.txt
+            R CMD build --keep-empty-dirs --no-resave-data ${PKG}
+            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings "${PKG}*.tar.gz"
