@@ -25,9 +25,15 @@ jobs:
           distro: none
           base_image: arm64v8/r-base
           githubToken: ${{ github.token }}
+          
+          install: |
+            apt-get update -q -y
+            apt-get install -q -y git
+            Rscript -e "install.packages(c('BiocManager', 'devtools')"
+          
           run: |
             uname -m
             env
             git clone https://github.com/grimbough/Rhdf5lib.git
-            Rscript -e "install.packages('BiocStyle')"
+            Rscript -e "library(remotes)" -e "dev_package_deps('Rhdf5lib', dependencies = TRUE) |> update(upgrade = 'always')"
             R CMD build Rhdf5lib
