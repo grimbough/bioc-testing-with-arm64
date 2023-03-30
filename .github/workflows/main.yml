@@ -21,10 +21,13 @@ jobs:
 
       - uses: uraimo/run-on-arch-action@v2
         with:
-          arch: aarch64
-          base_image: bioconductor/bioconductor:RELEASE_3_16
-          
+          arch: none
+          distro: none
+          base_image: bioconductor/bioconductor:RELEASE_3_16@b1567beb88ec8efc0e489abf553b0238ccdf7503c2a815a9bff183dc6be7138b
+          githubToken: ${{ github.token }}
           run: |
-            uname -a
+            uname -m
+            env
             git clone https://github.com/grimbough/Rhdf5lib.git
+            Rscript -e "install.packages('BiocStyle')"
             R CMD build Rhdf5lib
