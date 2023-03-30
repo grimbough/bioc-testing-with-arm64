@@ -29,7 +29,7 @@ jobs:
           install: |
             apt-get update -q -y
             apt-get install -q -y git
-            Rscript -e "install.packages(c('BiocManager', 'devtools')"
+            Rscript -e "install.packages(c('BiocManager', 'devtools'))"
           
           run: |
             uname -m
