@@ -42,4 +42,6 @@ jobs:
             R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
             cat ${PKG}.install-out.txt
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
-            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings "${PKG}*.tar.gz"
+            echo "Running R CMD check"
+            ls -l
+            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
