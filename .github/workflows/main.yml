@@ -19,13 +19,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v2
+      - uses: uraimo/run-on-arch-action@v2
         with:
-          platforms: arm64v8
-
-      - name: Test package
-        uses: grimbough/arm64-workflow/.github/workflows/check.yml@main
-        with:
-          repository: grimbough/Rhdf5lib
+          arch: aarch64
+          base_image: bioconductor/bioconductor:RELEASE_3_16
+          
+          run: |
+            uname -a
+            git clone https://github.com/grimbough/Rhdf5lib.git
+            R CMD build Rhdf5lib
