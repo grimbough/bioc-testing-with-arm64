@@ -121,8 +121,8 @@ jobs:
         with:
           name: my-artifact
           path: |
-            ${PWD}/*.tar.gz
-            ${PWD}/*.install-out.txt
-            ${PWD}/*.Rcheck
+            ${GITHUB_WORKSPACE}/*.tar.gz
+            ${GITHUB_WORKSPACE}/*.install-out.txt
+            ${GITHUB_WORKSPACE}/*.Rcheck
           if-no-files-found: warn
   
