@@ -50,7 +50,7 @@ jobs:
             
           env: |
             R_LIBS_USER: /tmp/R-lib
-            PKG: /build/BiocStyle
+            PKG: /build/rhdf5
             
           run: |
             uname -m
@@ -70,7 +70,7 @@ jobs:
             --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
           env: |
             R_LIBS_USER: /tmp/R-lib
-            PKG: /build/BiocStyle
+            PKG: /build/rhdf5
           
           run: |  
             Rscript -e "options('Ncpus')"
@@ -99,7 +99,7 @@ jobs:
             --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
           env: |
             R_LIBS_USER: /tmp/R-lib
-            PKG: /build/BiocStyle
+            PKG: /build/rhdf5
           
           run: |
             ## pdflatex isn't on the PATH unless we set this
