@@ -82,8 +82,10 @@ jobs:
         with:
           arch: none
           distro: none
-          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ github.token }}
+          githubToken: ${{ secrets.GHCR_TOKEN }}
+          
+          install: |
+            Rscript -e "install.packages('tinytex')" -e "tinytex::install_tinytex()"
           
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
@@ -101,7 +103,7 @@ jobs:
           arch: none
           distro: none
           base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ github.token }}
+          githubToken: ${{ secrets.GHCR_TOKEN }}
           
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
