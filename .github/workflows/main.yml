@@ -91,7 +91,7 @@ jobs:
                 'bera', 'caption', 'changepage', 'enumitem', 'fancyhdr', 
                 'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', 
                 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring',
-                'preprint'
+                'preprint', 'courier'
               ))"
 
           dockerRunArgs: |
@@ -117,6 +117,7 @@ jobs:
           ls -l ${{ runner.temp }}/R-lib
             
       - uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: my-artifact
           path: |
