@@ -86,6 +86,7 @@ jobs:
           
           install: |
             Rscript -e "install.packages('tinytex')" -e "tinytex::install_tinytex()"
+            Rscript -e "tinytex::tlmgr_install(c('bera'))"
             echo $PATH
             
           
