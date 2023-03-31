@@ -92,7 +92,7 @@ jobs:
                 'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', 
                 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring',
                 'preprint'
-              ))" 
+              ))"
 
           dockerRunArgs: |
             --volume "${PWD}:/build"
@@ -102,6 +102,8 @@ jobs:
             PKG: /build/BiocStyle
           
           run: |
+            ## pdflatex isn't on the PATH unless we set this
+            PATH=~/bin/:${PATH}
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
             R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
             mkdir -p ${PKG}.buildbin-libdir
