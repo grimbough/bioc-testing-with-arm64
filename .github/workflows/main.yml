@@ -32,7 +32,8 @@ jobs:
           path: ${RUNNER_TEMP}/R-lib
           key: ${RUNNER_TEMP}/R-lib
 
-      - uses: uraimo/run-on-arch-action@v2
+      - name: Install Dependencies
+        uses: uraimo/run-on-arch-action@v2
         with:
           arch: none
           distro: none
@@ -49,14 +50,15 @@ jobs:
             
           env: |
             R_LIBS_USER: /tmp/R-lib
-            PKG: BiocStyle
+            PKG: /BiocStyle
             
           run: |
             uname -m
             env
-            Rscript -e "library(remotes)" -e "dev_package_deps('Rhdf5lib', dependencies = TRUE) |> update(upgrade = 'always')"
+            Rscript -e "library(remotes)" -e "dev_package_deps(Sys.getenv('PKG'), dependencies = TRUE) |> update(upgrade = 'always')"
             
-      - uses: uraimo/run-on-arch-action@v2
+      - name: Install Package
+        uses: uraimo/run-on-arch-action@v2
         with:
           arch: none
           distro: none
@@ -74,8 +76,40 @@ jobs:
             Rscript -e "options('Ncpus')"
             R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
             cat ${PKG}.install-out.txt
+            
+      - name: Build Package
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: none
+          distro: none
+          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
+          githubToken: ${{ github.token }}
+          
+          dockerRunArgs: |
+            --volume "${PWD}/BiocStyle:/BiocStyle"
+            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
+          env: |
+            R_LIBS_USER: /tmp/R-lib
+            PKG: /BiocStyle
+          
+          run: |  
+            R CMD build --keep-empty-dirs --no-resave-data ${PKG}
+            
+      - name: Check Package
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: none
+          distro: none
+          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
+          githubToken: ${{ github.token }}
+          
+          dockerRunArgs: |
+            --volume "${PWD}/BiocStyle:/BiocStyle"
+            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
+          env: |
+            R_LIBS_USER: /tmp/R-lib
+            PKG: /BiocStyle
+          
+          run: |  
+            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
 
-#            R CMD build --keep-empty-dirs --no-resave-data ${PKG}
-#            echo "Running R CMD check"
-#            ls -l
-#            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
