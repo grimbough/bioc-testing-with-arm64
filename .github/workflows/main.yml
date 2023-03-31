@@ -38,7 +38,7 @@ jobs:
           arch: none
           distro: none
           base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ github.token }}
+          githubToken: ${{ secrets.GHCR_TOKEN }}
           
           install: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
@@ -63,7 +63,7 @@ jobs:
           arch: none
           distro: none
           base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ github.token }}
+          githubToken: ${{ secrets.GHCR_TOKEN }}
           
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
