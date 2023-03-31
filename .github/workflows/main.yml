@@ -87,9 +87,10 @@ jobs:
           install: |
             Rscript -e "install.packages('tinytex')" \
               -e "tinytex::install_tinytex(extra_packages = c(
-                'caption', 'changepage', 'enumitem',
-                'bera', 'fancyhdr', 'footmisc', 'marginfix', 'mathtools', 'nowidow', 
-                'parnotes', 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring'
+                'bera', 'caption', 'changepage', 'enumitem', 'fancyhdr', 
+                'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', 
+                'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring',
+                'preprint'
               ))" 
 
           dockerRunArgs: |
