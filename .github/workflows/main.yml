@@ -77,7 +77,7 @@ jobs:
             R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
             cat ${PKG}.install-out.txt
             
-      - name: Build Package
+      - name: Build & Check Package
         uses: uraimo/run-on-arch-action@v2
         with:
           arch: none
@@ -102,33 +102,24 @@ jobs:
             PKG: /build/BiocStyle
           
           run: |
-            echo ${PATH}
-            PATH=~/bin/:${PATH}
-            ls -l ~/bin
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
+            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
+            mkdir -p ${PKG}.buildbin-libdir
+            R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
             
       - name: What's here?
         run: |
           echo "$PWD"
           ls -lh ${PWD}
-          echo "${{ runner.temp }}R-lib"
+          echo "${{ runner.temp }}/R-lib"
           ls -l ${{ runner.temp }}/R-lib
             
-      - name: Check Package
-        uses: uraimo/run-on-arch-action@v2
+      - uses: actions/upload-artifact@v3
         with:
-          arch: none
-          distro: none
-          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ secrets.GHCR_TOKEN }}
-          
-          dockerRunArgs: |
-            --volume "${PWD}:/build"
-            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
-          env: |
-            R_LIBS_USER: /tmp/R-lib
-            PKG: /build/BiocStyle
-          
-          run: |  
-            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
-
+          name: my-artifact
+          path: |
+            ${PWD}/*.tar.gz
+            ${PWD}/*.install-out.txt
+            ${PWD}/*.Rcheck
+          if-no-files-found: warn
+  
