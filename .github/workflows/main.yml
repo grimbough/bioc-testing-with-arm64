@@ -42,7 +42,6 @@ jobs:
           
           install: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e "install.packages('tinytex')" -e "tinytex::install_tinytex()"
 
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
@@ -87,6 +86,8 @@ jobs:
           
           install: |
             Rscript -e "install.packages('tinytex')" -e "tinytex::install_tinytex()"
+            echo $PATH
+            
           
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
@@ -95,7 +96,10 @@ jobs:
             R_LIBS_USER: /tmp/R-lib
             PKG: /BiocStyle
           
-          run: |  
+          run: |
+            echo ${PATH}
+            PATH=~/bin/:${PATH}
+            ls -l ~/bin
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
             
       - name: Check Package
