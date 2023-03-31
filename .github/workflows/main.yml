@@ -86,10 +86,10 @@ jobs:
           
           install: |
             Rscript -e "install.packages('tinytex')" \
-              -e "tinytex::install_tinytex()" \
-              -e "tinytex::tlmgr_install(c('authblk', 'beramono', 'caption', 'changepage', 'color', 'enumitem'))" \
-              -e "tinytex::tlmgr_install(c('etoolbox', 'fancyhdr', 'fontenc', 'footmisc', 'framed', 'geometry', 'graphicx'))" \
-              -e "tinytex::tlmgr_install(c('hyperref', 'ifthen', 'marginfix', 'mathtools', 'nowidow', 'parnotes', 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'titletoc', 'xstring'))"
+              -e "tinytex::install_tinytex(extra_packages = c(
+                'bera', 'fancyhdr', 'footmisc', 'marginfix', 'mathtools', 'nowidow', 
+                'parnotes', 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring'
+              ))" 
 
           dockerRunArgs: |
             --volume "${PWD}/BiocStyle:/BiocStyle"
