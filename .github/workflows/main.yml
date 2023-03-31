@@ -115,14 +115,15 @@ jobs:
           ls -lh ${PWD}
           echo "${{ runner.temp }}/R-lib"
           ls -l ${{ runner.temp }}/R-lib
+          echo ${{ github.workspace }}
             
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: my-artifact
           path: |
-            ${GITHUB_WORKSPACE}/*.tar.gz
-            ${GITHUB_WORKSPACE}/*.install-out.txt
-            ${GITHUB_WORKSPACE}/*.Rcheck
+            ${{ github.workspace }}/*.tar.gz
+            ${{ github.workspace }}/*.install-out.txt
+            ${{ github.workspace }}/*.Rcheck
           if-no-files-found: warn
   
