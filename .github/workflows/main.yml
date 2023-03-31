@@ -29,7 +29,7 @@ jobs:
         id: cache-deps
         uses: actions/cache@v3
         with:
-          path: ${{ github.runner_temp }}/R-lib
+          path: ${{ runner.temp }}/R-lib
           key: R-lib
 
       - name: Install Dependencies
@@ -109,10 +109,10 @@ jobs:
             
       - name: What's here?
         run: |
-          echo "PWD"
+          echo "$PWD"
           ls -lh ${PWD}
-          echo "R-lib"
-          ls -l ${{ github.runner_temp }}/R-lib
+          echo "${{ runner.temp }}R-lib"
+          ls -l ${{ runner.temp }}/R-lib
             
       - name: Check Package
         uses: uraimo/run-on-arch-action@v2
