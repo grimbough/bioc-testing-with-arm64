@@ -37,5 +37,5 @@ jobs:
     - name: Build
       run: |  
         docker buildx build ${{ github.workspace }} --tag ghcr.io/grimbough/bioc-arm64-tinytex:latest
-        docker run ghcr.io/grimbough/bioc-arm64-tinytex:latest
+        #docker run ghcr.io/grimbough/bioc-arm64-tinytex:latest
         docker push ghcr.io/grimbough/bioc-arm64-tinytex:latest
