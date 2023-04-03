@@ -53,7 +53,7 @@ jobs:
             Rscript -e "library(remotes)" -e "dev_package_deps(Sys.getenv('PKG'), dependencies = TRUE) |> update(upgrade = 'always')"
             
   check-arm64:
-    needs: install-dependenceies
+    needs: install-dependencies
     name: Test package on ARM64
     runs-on: ${{ matrix.os }}
     strategy:
