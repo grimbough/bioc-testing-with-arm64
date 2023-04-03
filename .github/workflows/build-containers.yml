@@ -34,8 +34,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: Build
-      run: |  
-        docker buildx build ${{ github.workspace }} --tag ghcr.io/grimbough/bioc-arm64-tinytex:latest
-        #docker run ghcr.io/grimbough/bioc-arm64-tinytex:latest
-        docker push ghcr.io/grimbough/bioc-arm64-tinytex:latest
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ghcr.io/user/bioc-3.16-tinytex:latest
