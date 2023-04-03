@@ -1,0 +1,40 @@
+---
+name: "Build Bioc Containers with TinyTex"
+
+on:
+  push:
+    branches:
+      - docker-builder
+  workflow_dispatch:
+
+
+jobs:
+  build-containers:
+    name: Build Docker Containers
+    runs-on: ubuntu-22.04
+    
+    steps: 
+    
+    - uses: actions/checkout@v3
+      
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: arm64
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        install: true
+
+    - name: Login to Github Registry
+      run: |
+        echo $CR_PAT | docker login ghcr.io -u grimbough --password-stdin
+      env:
+        CR_PAT: ${{ secrets.GHCR_TOKEN }}
+   
+    - name: Build
+      run: |     
+        docker buildx build . --tag ghcr.io/grimbough/bioc-arm64-tinytex:latest
+        docker run ghcr.io/grimbough/bioc-arm64-tinytex:latest
+        docker push ghcr.io/grimbough/bioc-arm64-tinytex:latest
