@@ -7,27 +7,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-arm64:
-    name: Test package on ARM64
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04]
 
-    steps:
+  install-dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-22.04
     
-      - name: checkout
-        uses: actions/checkout@v3
-        
+    steps:
+      
       - name: Clone package to be tested
         run: |
           git clone https://github.com/grimbough/rhdf5.git
           cd rhdf5
           git checkout h5s_unlimited
-        
-      - name: Make R library
-        run: mkdir -p ${RUNNER_TEMP}/R-lib
-        
+
       - name: Cache Dependencies
         id: cache-deps
         uses: actions/cache@v3
@@ -60,6 +52,35 @@ jobs:
             env
             Rscript -e "library(remotes)" -e "dev_package_deps(Sys.getenv('PKG'), dependencies = TRUE) |> update(upgrade = 'always')"
             
+  check-arm64:
+    needs: install-dependenceies
+    name: Test package on ARM64
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+
+    steps:
+    
+      - name: checkout
+        uses: actions/checkout@v3
+        
+      - name: Clone package to be tested
+        run: |
+          git clone https://github.com/grimbough/rhdf5.git
+          cd rhdf5
+          git checkout h5s_unlimited
+        
+      - name: Make R library
+        run: mkdir -p ${RUNNER_TEMP}/R-lib
+        
+      - name: Load Cached Dependencies
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          path: ${{ runner.temp }}/R-lib
+          key: R-lib
+        
       - name: Install Package
         uses: uraimo/run-on-arch-action@v2
         with:
