@@ -26,15 +26,16 @@ jobs:
       uses: docker/setup-buildx-action@v2
       with:
         install: true
+        
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: Login to Github Registry
-      run: |
-        echo $CR_PAT | docker login ghcr.io -u grimbough --password-stdin
-      env:
-        CR_PAT: ${{ secrets.GHCR_TOKEN }}
-   
     - name: Build
-      run: |     
-        docker buildx build . --tag ghcr.io/grimbough/bioc-arm64-tinytex:latest
+      run: |  
+        docker buildx build ${{ github.workspace }} --tag ghcr.io/grimbough/bioc-arm64-tinytex:latest
         docker run ghcr.io/grimbough/bioc-arm64-tinytex:latest
         docker push ghcr.io/grimbough/bioc-arm64-tinytex:latest
