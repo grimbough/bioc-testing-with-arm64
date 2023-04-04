@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
+FROM ghcr.io/bioconductor/bioconductor:devel-arm64
 
 RUN Rscript -e "install.packages('tinytex')" \
             -e "tinytex::install_tinytex(extra_packages = c( \
