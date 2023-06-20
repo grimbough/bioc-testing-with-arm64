@@ -8,6 +8,6 @@ RUN Rscript -e "install.packages('tinytex')" \
                 'preprint', 'courier' \
               ))"
 
-ENV PATH="${PATH}:/root/.TinyTex/bin/aarch64-linux/"
+ENV PATH="${PATH}:/root/.TinyTeX/bin/aarch64-linux/"
 
 ENTRYPOINT ["R"]
