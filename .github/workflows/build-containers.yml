@@ -12,10 +12,11 @@ jobs:
   build-containers:
     name: Build Docker Containers
     runs-on: ubuntu-22.04
-    matrix:
-      platform:
-        - linux/amd64
-        - linux/arm64
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     
     steps: 
     
