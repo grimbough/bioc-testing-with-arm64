@@ -16,6 +16,6 @@ RUN Rscript -e "install.packages('tinytex')" \
                 'preprint', 'courier' \
               ))"
 
-ENV PATH="${PATH}:${HOME}/bin"
+ENV PATH="${PATH}:/root/bin"
 
 ENTRYPOINT ["R"]
