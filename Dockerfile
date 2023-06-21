@@ -6,9 +6,7 @@ FROM ${BASE_IMAGE}:devel-amd64 AS base-amd64
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH:-amd64}
 
-run echo ${TARGETARCH}
-
-FROM ghcr.io/bioconductor/bioconductor:devel-${TARGETARCH}
+FROM base-${TARGETARCH}
 
 RUN Rscript -e "install.packages('tinytex')" \
             -e "tinytex::install_tinytex(extra_packages = c( \
@@ -18,6 +16,6 @@ RUN Rscript -e "install.packages('tinytex')" \
                 'preprint', 'courier' \
               ))"
 
-ENV PATH="${PATH}:/root/.TinyTeX/bin/aarch64-linux/"
+ENV PATH="${PATH}:${HOME}/bin"
 
 ENTRYPOINT ["R"]
