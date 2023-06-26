@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - docker-builder
-      - main
   schedule:
   # should run at midnight on the 1st and 15th days of each month
     - cron:  '0 0 1,15 * *'
