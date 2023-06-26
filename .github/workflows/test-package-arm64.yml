@@ -52,7 +52,7 @@ jobs:
             --env R_LIBS_USER=/R-lib
           run: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" -e "BiocManager::install(pkgs$package[pkgs$diff > 1 | pkgs$diff < 0], update = TRUE, ask = FALSE)"
+            Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" -e "pkgs" -e "pkgs$package[pkgs$diff > 1 | pkgs$diff < 0]" -e "BiocManager::install(pkgs$package[pkgs$diff > 1 | pkgs$diff < 0], update = TRUE, ask = FALSE)"
             
   check-arm64:
     name: Test package on ARM64
