@@ -53,7 +53,7 @@ jobs:
           run: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
             Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" \
-                    -e "BiocManager::install(tmp$package[tmp$diff > 1 | tmp$diff < 0], update = TRUE)"
+                    -e "BiocManager::install(pkgs$package[pkgs$diff > 1 | pkgs$diff < 0], update = TRUE)"
             
   check-arm64:
     name: Test package on ARM64
