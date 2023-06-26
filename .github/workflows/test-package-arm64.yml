@@ -52,7 +52,7 @@ jobs:
             --env R_LIBS_USER=/R-lib
           run: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" -e "pkgs" -e "pkgs$package[pkgs$diff > 1 | pkgs$diff < 0]" -e "BiocManager::install(pkgs$package[pkgs$diff > 1 | pkgs$diff < 0], update = TRUE, ask = FALSE)"
+            Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" -e "BiocManager::install(pkgs$package, update = TRUE, ask = FALSE)"
             
   check-arm64:
     name: Test package on ARM64
@@ -96,8 +96,8 @@ jobs:
             cat examplePKG.install-out.txt
             R CMD build --keep-empty-dirs --no-resave-data examplePKG
             R CMD check --install=check:examplePKG.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings examplePKG*.tar.gz
-            mkdir -p ${PKG}.buildbin-libdir
-            R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
+            mkdir -p examplePKG.buildbin-libdir
+            R CMD INSTALL --build --library=examplePKG.buildbin-libdir examplePKG*.tar.gz
             exit 1;
           shell: bash
 
