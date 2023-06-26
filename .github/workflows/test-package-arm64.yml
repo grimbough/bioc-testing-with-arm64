@@ -52,7 +52,8 @@ jobs:
             --env R_LIBS_USER=/R-lib
           run: |
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e "library(remotes)" -e "dev_package_deps('/build/examplePKG', dependencies = TRUE) |> update(upgrade = 'always')"
+            Rscript -e "pkgs <- remotes::dev_package_deps('/build/examplePKG', dependencies = TRUE)" \
+                    -e "BiocManager::install(tmp$package[tmp$diff > 1 | tmp$diff < 0], update = TRUE)"
             
   check-arm64:
     name: Test package on ARM64
@@ -98,6 +99,7 @@ jobs:
             R CMD check --install=check:examplePKG.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings examplePKG*.tar.gz
             mkdir -p ${PKG}.buildbin-libdir
             R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
+            exit 1;
           shell: bash
 
       - uses: actions/upload-artifact@v3
