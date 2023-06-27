@@ -41,10 +41,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Run the build process with Docker
+      - name: Install the dependencies
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
+          shell: bash
           options: |
             --platform linux/arm64
             --volume ${{ runner.temp }}/R-lib:/R-lib
