@@ -13,7 +13,7 @@ RUN Rscript -e "install.packages('tinytex')" \
                 'bera', 'caption', 'changepage', 'enumitem', 'fancyhdr', \
                 'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', \
                 'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring', \
-                'preprint', 'courier' \
+                'preprint', 'courier', 'pgf' \
               ))"
 
 ENV PATH="${PATH}:/root/bin"
