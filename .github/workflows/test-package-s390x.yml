@@ -46,7 +46,7 @@ jobs:
           run: |
             uname -m
             echo "options(Ncpus=4L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e 'install.packages(c("remotes", "BiocManager"))' \
+            Rscript -e 'install.packages(c("cli", "remotes", "BiocManager"))' \
                     -e 'pkgs <- remotes::dev_package_deps("/build/examplePKG", dependencies = TRUE)' \
                     -e 'BiocManager::install(pkgs$package, update = TRUE, ask = FALSE)'
             
