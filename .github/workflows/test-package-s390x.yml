@@ -50,72 +50,72 @@ jobs:
                     -e 'pkgs <- remotes::dev_package_deps("/build/examplePKG", dependencies = TRUE)' \
                     -e 'BiocManager::install(pkgs$package, update = TRUE, ask = FALSE)'
             
-  # check-arm64:
-  #   name: Test package on ARM64
-  #   runs-on: ubuntu-22.04
-  #   needs:   install-dependencies
-  #   steps:
-  # 
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  # 
-  #     - name: Make R library
-  #       run: mkdir -p ${RUNNER_TEMP}/R-lib
-  #       
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v2
-  #       with:
-  #         platforms: arm64
-  # 
-  #     - name: Cache Dependencies
-  #       id: cache-deps
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ${{ runner.temp }}/R-lib
-  #         key: R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
-  #         restore-keys: |
-  #           R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
-  #           R_lib-ARM64-
-  # 
-  #     - name: Test Package
-  #       uses: addnab/docker-run-action@v3
-  #       with:
-  #         image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
-  #         options: |
-  #           --platform linux/arm64
-  #           --volume ${{ runner.temp }}/R-lib:/R-lib
-  #           --volume ${{ github.workspace }}:/build
-  #           --env R_LIBS_USER=/R-lib
-  #           --workdir /build
-  #         run: |
-  #           ## Install and store the log like on the BioC Build System
-  #           R CMD INSTALL examplePKG &> examplePKG.install-out.txt
-  #           if [ $? -eq  1 ]; then
-  #             cat examplePKG.install-out.txt
-  #             exit 1;
-  #           fi
-  #           
-  #           ## build the package
-  #           R CMD build --keep-empty-dirs --no-resave-data examplePKG
-  #           if [ $? -eq  1 ]; then exit 1; fi
-  #           
-  #           ## Check the package using the shortcut from the BBS
-  #           R CMD check --install=check:examplePKG.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings examplePKG*.tar.gz
-  #           if [ $? -eq  1 ]; then exit 1; fi
-  #           
-  #           ## build a package binary for Linux ARM64
-  #           mkdir -p examplePKG.buildbin-libdir
-  #           R CMD INSTALL --build --library=examplePKG.buildbin-libdir examplePKG*.tar.gz
-  #           if [ $? -eq  1 ]; then exit 1; fi
-  #         shell: bash
-  # 
-  #     - uses: actions/upload-artifact@v3
-  #       if: always()
-  #       with:
-  #         name: my-artifact
-  #         path: |
-  #           ~/**/*.tar.gz
-  #           ~/**/*.install-out.txt
-  #           ~/**/*.Rcheck
-  #         if-no-files-found: warn
-  #         
+  check-s390x:
+    name: Test package on s390x
+    runs-on: ubuntu-22.04
+    needs:   install-dependencies
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make R library
+        run: mkdir -p ${RUNNER_TEMP}/R-lib
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: s390x
+
+      - name: Cache Dependencies
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/R-lib
+          key: R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
+            R_lib-s390x-
+
+      - name: Test Package
+        uses: addnab/docker-run-action@v3
+        with:
+          image: s390x/r-base:latest
+          options: |
+            --platform linux/s390x
+            --volume ${{ runner.temp }}/R-lib:/R-lib
+            --volume ${{ github.workspace }}:/build
+            --env R_LIBS_USER=/R-lib
+            --workdir /build
+          run: |
+            ## Install and store the log like on the BioC Build System
+            R CMD INSTALL examplePKG &> examplePKG.install-out.txt
+            if [ $? -eq  1 ]; then
+              cat examplePKG.install-out.txt
+              exit 1;
+            fi
+
+            ## build the package
+            R CMD build --keep-empty-dirs --no-resave-data examplePKG
+            if [ $? -eq  1 ]; then exit 1; fi
+
+            ## Check the package using the shortcut from the BBS
+            R CMD check --install=check:examplePKG.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings examplePKG*.tar.gz
+            if [ $? -eq  1 ]; then exit 1; fi
+
+            ## build a package binary for Linux ARM64
+            mkdir -p examplePKG.buildbin-libdir
+            R CMD INSTALL --build --library=examplePKG.buildbin-libdir examplePKG*.tar.gz
+            if [ $? -eq  1 ]; then exit 1; fi
+          shell: bash
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: my-artifact
+          path: |
+            ~/**/*.tar.gz
+            ~/**/*.install-out.txt
+            ~/**/*.Rcheck
+          if-no-files-found: warn
+
