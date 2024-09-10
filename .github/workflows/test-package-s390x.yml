@@ -1,4 +1,4 @@
-name: Testing package on arm64
+name: Testing package on s390x
 
 on:
   push:
@@ -44,8 +44,9 @@ jobs:
             --volume ${{ github.workspace }}:/build
             --env R_LIBS_USER=/R-lib
           run: |
+            uname -m
             echo "options(Ncpus=4L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e 'install.packages("remotes", "BiocManager")' \
+            Rscript -e 'install.packages(c("remotes", "BiocManager"))' \
                     -e 'pkgs <- remotes::dev_package_deps("/build/examplePKG", dependencies = TRUE)' \
                     -e 'BiocManager::install(pkgs$package, update = TRUE, ask = FALSE)'
             
