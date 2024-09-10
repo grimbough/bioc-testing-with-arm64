@@ -2,6 +2,8 @@ name: Testing package on arm64
 
 on:
   push:
+    branch: 
+    - main
   workflow_dispatch:
   
 jobs:
