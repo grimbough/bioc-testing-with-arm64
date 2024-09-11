@@ -44,12 +44,11 @@ jobs:
             --volume ${{ github.workspace }}:/build
             --env R_LIBS_USER=/R-lib
           run: |
-            uname -m
             apt-get update && apt-get -y install valgrind
-            Rscript -e 'install.packages(c("cli", "lifecycle"), INSTALL_opts=c("--no-test-load", "--no-byte-compile"))'
-            R -d valgrind -e 'library(cli)' -e 'library(lifecycle)'
-            R -e 'library(cli)' -e 'library(lifecycle)'
-            # R -d valgrind -e 'install.packages(c("cli","rlang","htmltools","lifecycle","cachem"))'
+            # Rscript -e 'install.packages(c("cli", "lifecycle"), INSTALL_opts=c("--no-test-load", "--no-byte-compile"))'
+            # R -d valgrind -e 'library(cli)' -e 'library(lifecycle)'
+            # R -e 'library(cli)' -e 'library(lifecycle)'
+            R -d 'valgrind --tool=memcheck --leak-check=full --track-origins=yes --show-leak-kinds=definite' -e 'install.packages(c("cli","lifecycle"))'
             # echo "options(Ncpus = 4L, timeout = 300)" >> ~/.Rprofile
             # Rscript -e 'install.packages(c("cli", "rlang", "htmltools", "lifecycle", "cachem"), INSTALL_opts="--no-test-load")' \
             #         -e 'install.packages(c("remotes", "BiocManager"))' \
