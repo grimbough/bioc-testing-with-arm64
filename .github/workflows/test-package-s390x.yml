@@ -9,7 +9,7 @@ on:
 jobs:
   install-dependencies:
     name: Install package dependencies
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
       - name: Checkout
@@ -23,15 +23,15 @@ jobs:
       - name: Make R library
         run: mkdir -p ${RUNNER_TEMP}/R-lib
         
-      - name: Cache Dependencies
-        id: cache-deps
-        uses: actions/cache@v4
-        with:
-          path: ${{ runner.temp }}/R-lib
-          key: R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
-          restore-keys: |
-            R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
-            R_lib-s390x-
+      # - name: Cache Dependencies
+      #   id: cache-deps
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ runner.temp }}/R-lib
+      #     key: R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
+      #     restore-keys: |
+      #       R_lib-s390x-${{ hashFiles('**/DESCRIPTION') }}
+      #       R_lib-s390x-
       
       - name: Install the dependencies
         uses: addnab/docker-run-action@v3
