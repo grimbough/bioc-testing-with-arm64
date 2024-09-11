@@ -45,9 +45,9 @@ jobs:
             --env R_LIBS_USER=/R-lib
           run: |
             uname -m
-            apt-get update && apt-get install valgrind
+            apt-get update && apt-get -y install valgrind
             Rscript -e 'install.packages(c("cli"), INSTALL_opts="--no-test-load")'
-            R -d valgrind -e library("cli")
+            R -d valgrind -e 'library("cli")'
             # echo "options(Ncpus = 4L, timeout = 300)" >> ~/.Rprofile
             # Rscript -e 'install.packages(c("cli", "rlang", "htmltools", "lifecycle", "cachem"), INSTALL_opts="--no-test-load")' \
             #         -e 'install.packages(c("remotes", "BiocManager"))' \
