@@ -19,6 +19,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: s390x
+          image: docker.io/tonistiigi/binfmt:qemu-v8.1.5
         
       - name: Make R library
         run: mkdir -p ${RUNNER_TEMP}/R-lib
@@ -71,6 +72,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: s390x
+          image: docker.io/tonistiigi/binfmt:qemu-v8.1.5
 
       - name: Cache Dependencies
         id: cache-deps
