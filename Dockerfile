@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/bioconductor/bioconductor
+ARG BASE_IMAGE=ghcr.io/bioconductor/bioconductor_docker
 FROM ${BASE_IMAGE}:devel-arm64 AS base-arm64
 FROM ${BASE_IMAGE}:devel-amd64 AS base-amd64
 
@@ -8,7 +8,8 @@ ENV TARGETARCH=${TARGETARCH:-amd64}
 
 FROM base-${TARGETARCH}
 
-RUN Rscript -e "install.packages('tinytex')" \
+RUN Rscript -e "install.packages('remotes')" \
+            -e "install.packages('tinytex')" \
             -e "tinytex::install_tinytex(extra_packages = c( \
                 'bera', 'caption', 'changepage', 'enumitem', 'fancyhdr', \
                 'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', \
